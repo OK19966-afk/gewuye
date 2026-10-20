@@ -112,6 +112,41 @@ body::before{
 .nav__link:hover::after,.nav__link.is-active::after{transform:scaleX(1);}
 .nav__link.is-active{color:var(--ink);}
 
+/* 移动端菜单按钮与下拉面板 */
+.nav__menu{
+  display:none;width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);background:rgba(255,255,255,.65);
+  align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;
+  position:relative;transition:border-color .3s,background .3s;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav__menu:hover{border-color:var(--sage);}
+.nav__menu span{
+  position:absolute;left:12px;right:12px;height:1.6px;background:var(--ink);
+  border-radius:2px;transition:top .3s var(--ease-out),transform .3s var(--ease-out),opacity .2s;
+}
+.nav__menu span:nth-child(1){top:14.5px;}
+.nav__menu span:nth-child(2){top:20px;}
+.nav__menu span:nth-child(3){top:25.5px;}
+.nav.menu-open .nav__menu span:nth-child(1){top:20px;transform:rotate(45deg);}
+.nav.menu-open .nav__menu span:nth-child(2){opacity:0;}
+.nav.menu-open .nav__menu span:nth-child(3){top:20px;transform:rotate(-45deg);}
+.nav__panel{
+  display:none;position:absolute;top:100%;left:0;right:0;
+  background:rgba(247,248,244,.96);
+  backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 24px 44px -24px rgba(28,37,32,.14);
+}
+.nav.menu-open .nav__panel{display:block;animation:menuIn .35s var(--ease-out) both;}
+@keyframes menuIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.nav__panel a{
+  display:block;padding:15px 32px;font-size:16px;color:var(--ink);
+  letter-spacing:.02em;border-top:1px solid var(--line);
+}
+.nav__panel a:first-child{border-top:none;}
+.nav__panel a:active{background:rgba(46,107,87,.06);}
+
 .btn{
   --bg:var(--green);--fg:#fff;
   position:relative;display:inline-flex;align-items:center;gap:10px;
@@ -300,7 +335,7 @@ section{position:relative;}
 .shot__bar i:nth-child(2){background:#E9D6A8;}
 .shot__bar i:nth-child(3){background:#BFD8C5;}
 .shot__bar span{
-  margin-left:10px;font-size:10.5px;color:var(--muted-2);letter-spacing:.1em;
+  margin-left:10px;font-size:11.5px;color:var(--muted-2);letter-spacing:.1em;
 }
 .shot__body{overflow:hidden;}
 .shot__body img{width:100%;display:block;transform:scale(1.01);}
@@ -385,7 +420,7 @@ section{position:relative;}
   display:flex;flex-direction:column;justify-content:space-between;
   min-height:260px;
 }
-.card--feature h3{font-size:36px;}
+.card--feature h3{font-size:clamp(28px,7vw,36px);}
 .card--feature p{font-size:16.5px;max-width:560px;}
 .card__rule{height:1px;background:var(--line);margin:22px 0;}
 .quote{
@@ -759,6 +794,9 @@ section{position:relative;}
   .split,.split--rev{grid-template-columns:minmax(0,1fr);gap:44px;}
   .tri,.team,.road{grid-template-columns:minmax(0,1fr);}
   .nav__links{display:none;}
+  .nav__inner{gap:14px;padding:0 20px;}
+  .nav__inner > .btn{margin-left:auto;}
+  .nav__menu{display:inline-flex;}
 }
 @media (max-width:760px){
   :root{--nav-h:64px;}
@@ -773,8 +811,9 @@ section{position:relative;}
   .gap{grid-template-columns:32px 1fr;gap:10px 14px;padding:22px 4px;}
   .gap__from{grid-column:2;}
   .gap__arrow{display:none;}
-  .gap__to{grid-column:2;}
-  .gap__desc{grid-column:2;}
+  .gap > div{grid-column:2;}
+  .gap__to{grid-column:auto;}
+  .gap__desc{grid-column:auto;}
   .hero__float{right:8px;bottom:-16px;padding:11px 14px;}
   .hero__metrics{gap:22px;}
   .cta__steps{grid-template-columns:1fr;}
@@ -787,6 +826,12 @@ section{position:relative;}
   .step{width:100%;}
   .flow__head{padding:0 20px 30px;flex-direction:column;align-items:flex-start;gap:14px;}
   .flow__foot{padding:26px 20px 0;margin-top:24px;}
+}
+/* 超小屏：二维码卡纵向排布 */
+@media (max-width:420px){
+  .qr-card{flex-direction:column;text-align:center;gap:16px;padding:22px 20px;}
+  .qr-card__img{width:132px;height:132px;}
+  .nav__panel a{padding:14px 24px;font-size:15.5px;}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -819,7 +864,18 @@ section{position:relative;}
       开始训练
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h9M8.5 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
+    <button class="nav__menu" id="navMenuBtn" aria-label="打开菜单" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+  <nav class="nav__panel" id="navPanel" aria-label="章节导航">
+    <a href="#value">你能得到什么</a>
+    <a href="#gap">解决的问题</a>
+    <a href="#flow">训练流程</a>
+    <a href="#scene">适用人群</a>
+    <a href="#why">为什么更好用</a>
+    <a href="#price">收费</a>
+  </nav>
 </header>
 
 <!-- ================= HERO ================= -->
@@ -1591,8 +1647,10 @@ section{position:relative;}
     const docH = document.documentElement.scrollHeight - window.innerHeight;
     pbar.style.width = (docH > 0 ? (y/docH*100) : 0) + "%";
     if (y > 40) nav.classList.add("is-stuck"); else nav.classList.remove("is-stuck");
-    if (y > 260 && y > lastY + 4) nav.classList.add("is-hidden");
-    else if (y < lastY - 4 || y < 260) nav.classList.remove("is-hidden");
+    if (!nav.classList.contains("menu-open")){
+      if (y > 260 && y > lastY + 4) nav.classList.add("is-hidden");
+      else if (y < lastY - 4 || y < 260) nav.classList.remove("is-hidden");
+    }
     lastY = y;
     let cur = "";
     sections.forEach(sec=>{ if (y >= sec.offsetTop - 140) cur = sec.id; });
@@ -1614,6 +1672,27 @@ section{position:relative;}
       window.scrollTo({top, behavior: reduced ? "auto" : "smooth"});
     });
   });
+
+  /* 移动端章节菜单 */
+  const menuBtn = document.getElementById("navMenuBtn");
+  const navPanel = document.getElementById("navPanel");
+  if (menuBtn && navPanel){
+    menuBtn.addEventListener("click", ()=>{
+      const open = nav.classList.toggle("menu-open");
+      menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      menuBtn.setAttribute("aria-label", open ? "关闭菜单" : "打开菜单");
+      if (open){ nav.classList.remove("is-hidden"); nav.classList.add("is-stuck"); }
+      else if (window.scrollY <= 40){ nav.classList.remove("is-stuck"); }
+    });
+    navPanel.querySelectorAll("a").forEach(a=>{
+      a.addEventListener("click", ()=>{
+        nav.classList.remove("menu-open");
+        menuBtn.setAttribute("aria-expanded", "false");
+        menuBtn.setAttribute("aria-label", "打开菜单");
+        if (window.scrollY <= 40) nav.classList.remove("is-stuck");
+      });
+    });
+  }
 
   /* CTA 聚光跟随 */
   const cta = document.querySelector(".cta");
@@ -1817,6 +1896,5 @@ section{position:relative;}
   window.addEventListener("load", ()=>{ ScrollTrigger.refresh(); });
 })();
 </script>
-</body>
 </body>
 </html>
