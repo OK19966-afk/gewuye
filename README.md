@@ -14,7 +14,7 @@ python3 -m http.server 8000
 ## 结构
 
 ```
-index.html          单文件页面（内联 CSS / JS，无外部依赖）
+index.html          单文件页面（内联 CSS / JS / GSAP 3.13，零外部依赖，图片除外）
 assets/
   logo-mark.png     格物页标识
   logo-qingyun.png  青昀科创标识
@@ -24,16 +24,16 @@ assets/
   qr-wechat.png     微信二维码
 ```
 
-## 动效
+## 动效（GSAP 3.13 + ScrollTrigger，已内联进 index.html）
 
-- 首屏标题遮罩逐行上浮，元素分级延迟入场
-- 鼠标视差 + 产品截图 3D 倾斜
-- 滚动揭示（IntersectionObserver 级联）
-- 数字滚动
-- 竖向钉住 + 横向推进的五步训练流程
-- 卡片光斑跟随、marquee 跑马灯
-- 导航毛玻璃 / 下滑隐藏 / 锚点高亮、顶部滚动进度条
-- 支持 `prefers-reduced-motion` 降级
+- 首屏 timeline 分级入场（标题遮罩逐行上浮）
+- 鼠标视差（quickTo 平滑跟随）+ 产品截图 3D 倾斜
+- ScrollTrigger.batch 区块级联揭示
+- 数字滚动（ScrollTrigger once）
+- 训练流程：ScrollTrigger pin + 横向 scrub，步骤以 containerAnimation 判定激活态
+- 磁吸按钮、卡片光斑跟随、marquee 跑马灯
+- 段落图片轻微视差、CTA 入场
+- 支持 `prefers-reduced-motion` 降级，GSAP 加载失败时页面静态可读
 
 ## 技术
 
